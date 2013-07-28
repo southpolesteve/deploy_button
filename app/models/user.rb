@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   
   def self.create_with_omniauth(auth)
     user = create! provider: auth['provider'], uid: auth['credentials']['token']
-    heroku = Heroku.new(user.uid)
+    heroku = HerokuAPI.new(user.uid)
     account = heroku.account
     user.update_attributes email: account['email']
     user

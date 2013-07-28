@@ -19,6 +19,8 @@ gem 'httparty'
 gem 'grit'
 gem 'sshkey'
 gem 'heroku'
+gem 'sidekiq'
+gem 'git_ssh_wrapper'
 
 group :development do
   gem 'better_errors'
