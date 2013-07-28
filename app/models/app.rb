@@ -1,6 +1,10 @@
 class App < ActiveRecord::Base
   belongs_to :user
 
+  def deploy_async
+    DeployWorker.perform_async(id)
+  end
+
   def deploy
     create_on_heroku
     push_to_heroku

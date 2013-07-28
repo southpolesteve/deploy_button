@@ -19,10 +19,11 @@ gem 'httparty'
 gem 'sidekiq'
 gem 'git-ssh-wrapper'
 gem 'pry-rails'
-gem 'heroku-api'
+gem 'sidekiq'
 
 group :production do
   gem "rails_12factor"
+  gem 'unicorn'
 end
 
 group :development do

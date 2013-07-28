@@ -1,6 +1,8 @@
-.alert.alert-success
-  Creating a new heroku app
-.alert.alert-warning
-  Cloning the repo and pushing to the new app
-.alert.alert-warning
-  Transfering ownership to you
+%p We're deploying a new instance of #{app.owner}/#{app.name} for you. You will get an email from heroku inviting you as a collaborator when it is ready. This process can take quite some time depending on the size of the repo and how many deploys are in front of you. If you want to see things move faster, send money to southpolesteve@gmail.com so I can increase server capacity
+
+%p Steps taken:
+
+  %ol
+    %li Creating a new heroku app
+    %li Clone the repo and pushing to heroku
+    %li Transfering ownership to you
