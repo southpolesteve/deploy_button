@@ -10,7 +10,7 @@ class App < ActiveRecord::Base
   end
 
   def repo_git_dir_loc
-    "/tmp/#{owner}-#{name}"
+    "/tmp/#{owner}-#{name}/.git"
   end
 
   def github_url
