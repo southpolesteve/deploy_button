@@ -20,6 +20,8 @@ gem 'sidekiq'
 gem 'git-ssh-wrapper'
 gem 'pry-rails'
 gem 'sidekiq'
+gem 'slim'
+gem 'sinatra'
 
 group :production do
   gem "rails_12factor"
