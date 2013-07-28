@@ -6,6 +6,10 @@ class HerokuBot
     get("/account", :headers => { "Authorization" => "Basic #{auth_key}" })
   end
 
+  def self.transfer(app)
+    post("/app-transfers", body: { app: { name: app.name }, recipient: { email: app.user.email }} )
+  end
+
   def self.create_app
     post("/apps", :headers => { "Authorization" => "Basic #{auth_key}" })
   end

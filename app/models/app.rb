@@ -34,4 +34,8 @@ class App < ActiveRecord::Base
     `git clone #{github_url} #{repo_loc}`
   end
 
+  def transfer_to_user
+    HerokuBot.transfer(self)
+  end
+
 end
