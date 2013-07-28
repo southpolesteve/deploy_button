@@ -1,5 +1,5 @@
 class AppsController < ApplicationController
   def show
-    @app = App.find(params[:id])
+    @app = current_user.apps.find(params[:id])
   end
 end

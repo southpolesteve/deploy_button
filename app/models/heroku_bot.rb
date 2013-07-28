@@ -3,23 +3,30 @@ class HerokuBot
   base_uri "https://api.heroku.com/"
 
   def self.account
-    get("/account", :headers => { "Authorization" => "Basic #{auth_key}" })
+    get("/account", :headers => headers)
   end
 
   def self.transfer(app)
     post "/app-transfers", 
-      :headers => { "Authorization" => "Basic #{auth_key}" }, 
+      :headers => headers, 
       :body => { 
         :app => { 
+          :id => app.id,
           :name => app.name }, 
         :recipient => { 
+          :id => app.user.heroku_id,
           :email => app.user.email 
         }
-      }
+      }.to_json
+  end
+
+  def self.headers
+    { "Authorization" => "Basic #{auth_key}",
+      "Accept" => "application/vnd.heroku+json; version=3" }
   end
 
   def self.create_app
-    post("/apps", :headers => { "Authorization" => "Basic #{auth_key}" })
+    post("/apps", :headers => headers)
   end
 
   def self.auth_key

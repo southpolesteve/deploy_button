@@ -16,12 +16,10 @@ gem 'omniauth'
 gem 'omniauth-heroku'
 gem 'thin'
 gem 'httparty'
-gem 'grit'
-gem 'sshkey'
-gem 'heroku'
 gem 'sidekiq'
 gem 'git-ssh-wrapper'
 gem 'pry-rails'
+gem 'heroku-api'
 
 group :production do
   gem "rails_12factor"

@@ -1,4 +1,4 @@
-class HerokuAPI
+class HerokuPlatform
   include HTTParty
   base_uri "https://api.heroku.com/"
 
