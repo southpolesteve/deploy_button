@@ -9,15 +9,29 @@ class App < ActiveRecord::Base
     "/tmp/#{owner}-#{name}"
   end
 
-  def clone_from_github
-    gritty = Grit::Git.new('/tmp/filling-in')
-    gritty.clone({:quiet => true, :verbose => false, :progress => false}, "git@github.com:southpolesteve/github-ember.git", repo_loc)
-    # repo.git.remote({},'add','heroku',create_response['git_url']))
-    # repo.git.push({}, 'heroku', 'master')
+  def repo_git_dir_loc
+    "/tmp/#{owner}-#{name}"
   end
 
-  def repo
-    Grit::Repo.new(repo_loc)
+  def github_url
+    "https://github.com/#{owner}/#{name}.git"
+  end
+
+  def heroku_url
+    create_response['git_url']
+  end
+
+  def deploy_heroku_app
+    clone
+    GitSSHWrapper.with_wrapper(private_key: ENV['HEROKU_BOT_SSH_KEY']) do |wrapper|
+      wrapper.set_env
+      `git --git-dir #{repo_git_dir_loc} remote add heroku #{heroku_url}`
+      `git --git-dir #{repo_git_dir_loc} push heroku master`
+    end
+  end
+
+  def clone
+    `git clone #{github_url} #{repo_loc}`
   end
 
 end

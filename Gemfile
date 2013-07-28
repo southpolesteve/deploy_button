@@ -22,6 +22,10 @@ gem 'heroku'
 gem 'sidekiq'
 gem 'git-ssh-wrapper'
 
+group :production do
+  gem "rails_12factor"
+end
+
 group :development do
   gem 'better_errors'
   gem 'pry-rails'
@@ -29,6 +33,7 @@ group :development do
   gem 'html2haml'
   gem 'quiet_assets'
 end
+
 group :test do
   gem 'capybara'
   gem 'minitest-spec-rails'
