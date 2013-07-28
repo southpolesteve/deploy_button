@@ -7,7 +7,7 @@ class DeployController < ApplicationController
           redirect_to app
         end
       end
-      format.png { send_file view_context.image_path('deploy_button.png'), type: "image/png", disposition: "inline" }
+      format.png { send_file Rails.root.join("public", "deploy_button.png"), type: "image/png", disposition: "inline" }
     end
   end
 end
