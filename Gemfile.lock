@@ -66,6 +66,7 @@ GEM
     figaro (0.7.0)
       bundler (~> 1.0)
       rails (>= 3, < 5)
+    git-ssh-wrapper (0.2.0)
     grit (2.5.0)
       diff-lcs (~> 1.1)
       mime-types (~> 1.15)
@@ -232,6 +233,7 @@ DEPENDENCIES
   capybara
   coffee-rails (~> 4.0.0)
   figaro
+  git-ssh-wrapper
   grit
   haml-rails
   heroku
