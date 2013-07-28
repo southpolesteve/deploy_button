@@ -1,16 +1,13 @@
 class User < ActiveRecord::Base
-  attr_accessible :provider, :uid, :name, :email
-  validates_presence_of :name
 
+  has_many :apps
+  
   def self.create_with_omniauth(auth)
-    create! do |user|
-      user.provider = auth['provider']
-      user.uid = auth['uid']
-      if auth['info']
-         user.name = auth['info']['name'] || ""
-         user.email = auth['info']['email'] || ""
-      end
-    end
+    user = create! provider: auth['provider'], uid: auth['credentials']['token']
+    heroku = Heroku.new(user.uid)
+    account = heroku.account
+    user.update_attributes email: account['email']
+    user
   end
 
 end

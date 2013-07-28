@@ -1,2 +1,5 @@
 %h1 Home#index
 %p Find me in app/views/home/index.html.haml
+
+- if current_user
+  %p= current_user.uid

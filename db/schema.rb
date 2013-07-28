@@ -11,7 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130727200911) do
+ActiveRecord::Schema.define(version: 20130727230959) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+  enable_extension "hstore"
+
+  create_table "apps", force: true do |t|
+    t.integer  "user_id"
+    t.hstore   "create_response"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "owner"
+    t.string   "name"
+  end
+
+  add_index "apps", ["user_id"], name: "index_apps_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name"
