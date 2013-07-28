@@ -21,6 +21,7 @@ gem 'sshkey'
 gem 'heroku'
 gem 'sidekiq'
 gem 'git-ssh-wrapper'
+gem 'pry-rails'
 
 group :production do
   gem "rails_12factor"
@@ -28,7 +29,6 @@ end
 
 group :development do
   gem 'better_errors'
-  gem 'pry-rails'
   gem 'binding_of_caller'
   gem 'html2haml'
   gem 'quiet_assets'

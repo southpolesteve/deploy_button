@@ -27,10 +27,16 @@ class App < ActiveRecord::Base
       wrapper.set_env
       `git --git-dir #{repo_git_dir_loc} remote add heroku #{heroku_url}`
       `git --git-dir #{repo_git_dir_loc} push heroku master`
+      cleanup_repo
     end
   end
 
+  def cleanup_repo
+    `rm -rf #{repo_loc}`
+  end
+
   def clone
+    cleanup_repo
     `git clone #{github_url} #{repo_loc}`
   end
 
