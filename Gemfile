@@ -22,6 +22,7 @@ gem 'pry-rails'
 gem 'sidekiq'
 gem 'slim'
 gem 'sinatra'
+gem 'sentry-raven'
 
 group :production do
   gem "rails_12factor"
