@@ -18,6 +18,7 @@ gem 'thin'
 gem 'httparty'
 gem 'grit'
 gem 'sshkey'
+gem 'heroku'
 
 group :development do
   gem 'better_errors'
