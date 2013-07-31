@@ -19,7 +19,7 @@ class HerokuLegacy
   end
 
   def remove_bot(app)
-    self.class.delete("/apps/#{app.create_response['name']}/collaborators/southpolesteve%2Bdeploybot%40gmail.com", basic_auth: { username: "", password: @token } )
+    self.class.delete("/apps/#{app.create_response['name']}/collaborators/#{ENV['HEROKU_BOT_EMAIL']}", basic_auth: { username: "", password: @token } )
   end
   
 end

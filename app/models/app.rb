@@ -12,7 +12,7 @@ class App < ActiveRecord::Base
   end
 
   def create_on_heroku
-    update_attributes create_response: HerokuBot.create_app.to_hash unless create_response.present?
+    update_attributes create_response: HerokuBot.create.to_hash unless create_response.present?
   end
 
   def push_to_heroku

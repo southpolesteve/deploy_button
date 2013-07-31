@@ -2,43 +2,47 @@ class HerokuBot
   include HTTParty
   base_uri "https://api.heroku.com/"
 
-  def self.account
-    get("/account", :headers => headers)
-  end
+  class << self
 
-  def self.transfer(app)
-    post "/app-transfers", 
-      :headers => headers, 
-      :body => { 
-        :app => { 
-          :id => app.id,
-          :name => app.name }, 
-        :recipient => { 
-          :id => app.user.heroku_id,
-          :email => app.user.email 
-        }
-      }.to_json
-  end
+    def account
+      get("/account", :headers => headers)
+    end
 
-  def self.headers
-    { "Authorization" => "Basic #{auth_key}",
-      "Accept" => "application/vnd.heroku+json; version=3" }
-  end
+    def transfer(app)
+      post "/account/app-transfers", 
+        :headers => headers, 
+        :body => { 
+          :app => { 
+            :id => app.id,
+            :name => app.name }, 
+          :recipient => { 
+            :id => app.user.heroku_id,
+            :email => app.user.email 
+          }
+        }.to_json
+    end
 
-  def self.create_app
-    post("/apps", :headers => headers)
-  end
+    def create
+      post "/apps", :headers => headers 
+    end
 
-  def self.auth_key
-    @auth_key ||= Base64.encode64(":#{api_key}")
-  end
+    private
 
-  def self.api_key
-    ENV['HEROKU_BOT_API_KEY']
-  end
+    def headers
+      { "Authorization" => "Basic #{auth_key}", "Accept" => "application/vnd.heroku+json; version=3" }
+    end
 
-  def self.email
-    ENV['HEROKU_BOT_EMAIL']
-  end
+    def auth_key
+      @auth_key ||= Base64.encode64(":#{api_key}")
+    end
 
+    def api_key
+      ENV['HEROKU_BOT_API_KEY']
+    end
+
+    def email
+      ENV['HEROKU_BOT_EMAIL']
+    end
+
+  end
 end
