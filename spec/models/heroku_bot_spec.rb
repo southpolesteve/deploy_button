@@ -9,6 +9,7 @@ describe HerokuBot do
   end
 
   describe 'transfer' do
+    let(:app) { FactoryGirl.build(:app_created_on_heroku) }
     it 'calls the correct HTTParty method' do
       HerokuBot.should_receive(:post).with('/account/app-transfers', an_instance_of(Hash))
       HerokuBot.transfer(app)
