@@ -1,0 +1,6 @@
+postgresql: &postgresql
+  adapter: postgresql
+  username: postgres
+  password:
+  database: deploy_button_<%= Rails.env %>
+  min_messages: ERROR
