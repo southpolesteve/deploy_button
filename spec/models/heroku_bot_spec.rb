@@ -15,6 +15,7 @@ describe HerokuBot do
       HerokuBot.transfer(app)
     end
   end
+  
 
   describe 'create' do
     it 'calls the correct HTTParty method' do
