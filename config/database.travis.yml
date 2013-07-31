@@ -1,6 +1,12 @@
-postgresql: &postgresql
+defaults: &defaults
   adapter: postgresql
   username: postgres
   password:
-  database: deploy_button_<%= Rails.env %>
+  database: deploy_test
   min_messages: ERROR
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
