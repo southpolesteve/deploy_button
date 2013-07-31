@@ -5,12 +5,11 @@ class HerokuBot
   class << self
 
     def account
-      get("/account", :headers => headers)
+      get "/account" 
     end
 
     def transfer(app)
       post "/account/app-transfers", 
-        :headers => headers, 
         :body => { 
           :app => { 
             :id => app.id,
@@ -23,12 +22,12 @@ class HerokuBot
     end
 
     def create
-      post "/apps", :headers => headers 
+      post "/apps"
     end
 
     private
 
-    def headers
+    def auth_headers
       { "Authorization" => "Basic #{auth_key}", "Accept" => "application/vnd.heroku+json; version=3" }
     end
 
@@ -45,4 +44,6 @@ class HerokuBot
     end
 
   end
+
+  headers auth_headers
 end

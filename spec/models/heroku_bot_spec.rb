@@ -3,13 +3,13 @@ require 'spec_helper'
 describe HerokuBot do
   describe 'account' do
     it 'calls the correct HTTParty method' do
-      HerokuBot.should_receive(:get).with('/account', an_instance_of(Hash))
+      HerokuBot.should_receive(:get).with('/account')
       HerokuBot.account
     end
   end
 
   describe 'transfer' do
-    let(:app) { FactoryGirl.build(:app_created_on_heroku) }
+    let(:app) { build(:app_created_on_heroku) }
     it 'calls the correct HTTParty method' do
       HerokuBot.should_receive(:post).with('/account/app-transfers', an_instance_of(Hash))
       HerokuBot.transfer(app)
@@ -19,7 +19,7 @@ describe HerokuBot do
 
   describe 'create' do
     it 'calls the correct HTTParty method' do
-      HerokuBot.should_receive(:post).with('/apps', an_instance_of(Hash))
+      HerokuBot.should_receive(:post).with('/apps')
       HerokuBot.create
     end
   end

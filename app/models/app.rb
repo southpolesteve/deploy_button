@@ -7,6 +7,7 @@ class App < ActiveRecord::Base
 
   def deploy
     create_on_heroku
+    clone_to_local
     push_to_heroku
     transfer_to_user
   end
@@ -16,12 +17,11 @@ class App < ActiveRecord::Base
   end
 
   def push_to_heroku
-    clone
     GitSSHWrapper.with_wrapper(private_key: ENV['HEROKU_BOT_SSH_KEY']) do |wrapper|
       wrapper.set_env
       `git --git-dir #{repo_git_dir_loc} remote add heroku #{heroku_url}`
       `git --git-dir #{repo_git_dir_loc} push heroku master`
-      cleanup_repo
+      cleanup_local
     end
   end
 
@@ -51,11 +51,11 @@ class App < ActiveRecord::Base
     create_response['git_url']
   end
 
-  def cleanup_repo
+  def cleanup_local
     `rm -rf #{repo_loc}`
   end
 
-  def clone
+  def clone_to_local
     cleanup_repo
     `git clone #{github_url} #{repo_loc}`
   end
