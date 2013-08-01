@@ -45,4 +45,5 @@ group :test do
   gem 'capybara'
   gem 'vcr'
   gem 'webmock'
+  gem 'coveralls', require: false
 end
