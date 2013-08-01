@@ -14,8 +14,10 @@ class App < ActiveRecord::Base
   end
 
   def create_on_heroku
-    update_attributes create_response: HerokuBot.create.to_hash unless create_response.present?
-    touch(:created_on_heroku_at)
+    unless create_response.present?
+      update_attributes create_response: HerokuBot.create.to_hash
+      touch(:created_on_heroku_at)
+    end
   end
 
   def push_to_heroku
@@ -23,9 +25,9 @@ class App < ActiveRecord::Base
       wrapper.set_env
       `git --git-dir #{repo_git_dir_loc} remote add heroku #{heroku_url}`
       `git --git-dir #{repo_git_dir_loc} push heroku master`
-      cleanup_local
+      cleanup_local_repo
     end
-    touch(:pushed_at)
+    touch(:pushed_to_heroku_at)
   end
 
   def transfer_to_user
@@ -57,12 +59,13 @@ class App < ActiveRecord::Base
     create_response['git_url']
   end
 
-  def cleanup_local
+  def cleanup_local_repo
     `rm -rf #{repo_loc}`
   end
 
   def clone_to_local
-    cleanup_repo
+    cleanup_local_repo
+    binding.pry
     `git clone #{github_url} #{repo_loc}`
     touch(:cloned_at)
   end

@@ -30,7 +30,6 @@ describe HerokuBot do
       HerokuBot.remove_bot(app)
     end
   end
-  
 
   describe 'create' do
     it 'calls the correct HTTParty method' do
