@@ -12,13 +12,20 @@ class HerokuBot
       post "/account/app-transfers", 
         :body => { 
           :app => { 
-            :id => app.id,
-            :name => app.name }, 
+            :name => app.heroku_name }, 
           :recipient => { 
-            :id => app.user.heroku_id,
-            :email => app.user.email 
+            :email => app.user_email 
           }
         }.to_json
+    end
+
+    def add_user_as_collaborator(app)
+      post "/apps/#{app.heroku_name}/collaborators", 
+        body: { collaborator: { email: app.user.email } }
+    end
+
+    def remove_bot(app)
+      delete "/apps/#{app.heroku_name}/collaborators/#{ENV['HEROKU_BOT_EMAIL']}"
     end
 
     def create

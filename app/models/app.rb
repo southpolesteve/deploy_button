@@ -1,5 +1,6 @@
 class App < ActiveRecord::Base
   belongs_to :user
+  delegate :email, to: :user, prefix: true
 
   def deploy_async
     DeployWorker.perform_async(id)
@@ -14,6 +15,7 @@ class App < ActiveRecord::Base
 
   def create_on_heroku
     update_attributes create_response: HerokuBot.create.to_hash unless create_response.present?
+    touch(:created_on_heroku_at)
   end
 
   def push_to_heroku
@@ -23,14 +25,18 @@ class App < ActiveRecord::Base
       `git --git-dir #{repo_git_dir_loc} push heroku master`
       cleanup_local
     end
+    touch(:pushed_at)
   end
 
   def transfer_to_user
-    # Heroku platform API endpoint for app transfers seems to be currently broken. Using legacy API.
-    heroku = HerokuLegacy.new(HerokuBot.api_key)
-    heroku.add_collaborator(self)
-    heroku.transfer(self)
-    heroku.remove_bot(self)
+    HerokuBot.add_user_as_collaborator(self)
+    HerokuBot.transfer(self)
+    HerokuBot.remove_bot(self)
+    touch(:transfered_at)
+  end
+
+  def heroku_name
+    create_response['name']
   end
 
   private
@@ -58,6 +64,7 @@ class App < ActiveRecord::Base
   def clone_to_local
     cleanup_repo
     `git clone #{github_url} #{repo_loc}`
+    touch(:cloned_at)
   end
 
 end

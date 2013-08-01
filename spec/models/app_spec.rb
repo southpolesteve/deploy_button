@@ -13,4 +13,12 @@ describe App do
     end
   end
 
+  describe ".heroku_name" do
+    let(:app) { build(:app_created_on_heroku) }
+
+    it "is correct" do
+      app.heroku_name.should eq("afternoon-brook-7719")
+    end
+  end
+
 end
