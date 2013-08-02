@@ -4,7 +4,7 @@ describe 'User requests a deploy' do
 
   context "new deployment" do
     before do
-      App.any_instance.should_receive(:deploy_async)
+      DeployWorker.should_receive(:perform_async)
       HerokuPlatform.any_instance.should_receive(:account).and_return({'email'=>'test@example.com', 'id'=>'12312'})
     end
 
@@ -19,7 +19,7 @@ describe 'User requests a deploy' do
     let(:app) { create :app }
 
     before do
-      App.any_instance.should_receive(:deploy_async)
+      DeployWorker.should_receive(:perform_async).never
       HerokuPlatform.any_instance.should_receive(:account).and_return({'email'=> app.user_email, 'id'=>'12312'})
     end
 

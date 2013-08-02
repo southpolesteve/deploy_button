@@ -6,12 +6,12 @@ class AppsController < ApplicationController
 
   def create
     @app = current_user.apps.create!(person_params)
+    DeployWorker.perform_async(@app.id)
     redirect_to @app
   end
 
   def show
     load_app
-    @app.deploy_async
   end
 
   def charge
@@ -23,6 +23,7 @@ class AppsController < ApplicationController
         :card => params[:stripeToken],
         :description => current_user.email
 
+      PriorityDeployWorker.perform_async(@app.id)
     rescue Stripe::CardError => e
       flash[:error] = e.message
     end

@@ -2,15 +2,14 @@ class App < ActiveRecord::Base
   belongs_to :user
   delegate :email, to: :user, prefix: true
 
-  def deploy_async
-    DeployWorker.perform_async(id)
-  end
-
   def deploy
-    create_on_heroku
-    clone_to_local
-    push_to_heroku
-    transfer_to_user
+    unless deploy_started_at
+      touch(:deploy_started_at)
+      create_on_heroku
+      clone_to_local
+      push_to_heroku
+      transfer_to_user
+    end
   end
 
   def create_on_heroku

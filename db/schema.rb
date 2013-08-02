@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130802032059) do
+ActiveRecord::Schema.define(version: 20130802035948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20130802032059) do
     t.datetime "cloned_at"
     t.datetime "pushed_to_heroku_at"
     t.datetime "transfered_at"
+    t.datetime "deploy_started_at"
   end
 
   add_index "apps", ["user_id"], name: "index_apps_on_user_id", using: :btree

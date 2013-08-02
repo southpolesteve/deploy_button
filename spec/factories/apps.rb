@@ -7,6 +7,8 @@ FactoryGirl.define do
     user
 
     factory :app_created_on_heroku do
+      deploy_started_at { Time.now - 5.minutes }
+      created_on_heroku_at { Time.now - 3.minutes }
       create_response { {"id"=>"7cbc4420-1d23-4919-ab78-66d286b919a6",
        "name"=>"afternoon-brook-7719",
        "tier"=>"legacy",

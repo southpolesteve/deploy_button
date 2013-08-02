@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe App do
-  let(:app) { build(:app) }
+  let(:app) { create(:app) }
 
   describe ".deploy" do
     it "should call the proper methods in the correct order" do
@@ -10,6 +10,7 @@ describe App do
       app.should_receive(:push_to_heroku).ordered
       app.should_receive(:transfer_to_user).ordered
       app.deploy
+      app.deploy_started_at.should_not be_nil
     end
   end
 
