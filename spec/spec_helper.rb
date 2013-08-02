@@ -4,6 +4,10 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'coveralls'
+require 'vcr'
+require 'capybara/rails'
+require 'capybara/rspec'
+
 Coveralls.wear!
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -16,6 +20,13 @@ ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 # Setup ENV variables for tests
 ENV['HEROKU_BOT_EMAIL'] = 'test@example.com'
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/cassettes'
+  c.hook_into :webmock
+  c.ignore_localhost = true
+  c.configure_rspec_metadata!
+end
 
 RSpec.configure do |config|
   # ## Mock Framework
@@ -46,4 +57,19 @@ RSpec.configure do |config|
   config.order = "random"
 
   config.include FactoryGirl::Syntax::Methods
+  config.treat_symbols_as_metadata_keys_with_true_values = true
+
 end
+
+OmniAuth.config.test_mode = true
+OmniAuth.config.mock_auth[:heroku] = OmniAuth::AuthHash.new({
+  "provider" => "heroku",
+  "uid" => nil,
+  "info" => {},
+  "credentials" =>
+  {"token" => "jnkl123jnk123jnk123kjn12",
+   "refresh_token" => "k1231k23k123k12kwm1k2e1m2",
+   "expires_at" => 1375439943,
+   "expires" => true},
+  "extra" => {}
+  })

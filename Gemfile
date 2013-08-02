@@ -22,6 +22,7 @@ gem 'sidekiq'
 gem 'slim'
 gem 'sinatra'
 gem 'sentry-raven'
+gem 'stripe'
 
 group :production do
   gem "rails_12factor"
@@ -45,5 +46,7 @@ group :test do
   gem 'capybara'
   gem 'vcr'
   gem 'webmock'
+  gem 'selenium-webdriver'
+  gem 'database_cleaner'
   gem 'coveralls', require: false
 end

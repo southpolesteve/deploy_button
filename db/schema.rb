@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130801014108) do
+ActiveRecord::Schema.define(version: 20130802032059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 20130801014108) do
     t.string   "name"
     t.string   "email"
     t.string   "provider"
-    t.string   "uid"
+    t.string   "token"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "heroku_id"

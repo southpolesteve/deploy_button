@@ -38,7 +38,11 @@ class App < ActiveRecord::Base
   end
 
   def heroku_name
-    create_response['name']
+    create_response['name'] if create_response
+  end
+
+  def github_url
+    "https://github.com/#{owner}/#{name}.git"
   end
 
   private
@@ -49,10 +53,6 @@ class App < ActiveRecord::Base
 
   def repo_git_dir_loc
     "/tmp/#{owner}-#{name}/.git"
-  end
-
-  def github_url
-    "https://github.com/#{owner}/#{name}.git"
   end
 
   def heroku_url

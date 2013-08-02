@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :user do
     email "test@example.com"
     provider "heroku" 
-    uid "j123k1231kn2312jkn32kj3"
+    token "j123k1231kn2312jkn32kj3"
     heroku_id "asdasdad@users.heroku.com"
   end
 end
