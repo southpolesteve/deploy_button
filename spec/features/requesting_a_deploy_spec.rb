@@ -2,15 +2,31 @@ require 'spec_helper'
 
 describe 'User requests a deploy' do
 
-  before do
-    App.any_instance.should_receive(:deploy_async)
-    HerokuPlatform.any_instance.should_receive(:account).and_return({'email'=>'test@example.com', 'id'=>'12312'})
+  context "new deployment" do
+    before do
+      App.any_instance.should_receive(:deploy_async)
+      HerokuPlatform.any_instance.should_receive(:account).and_return({'email'=>'test@example.com', 'id'=>'12312'})
+    end
+
+    it "queues a new app for deployment" do
+      visit "/deploy/begriffs/lucre"
+      click_on 'OK! Go!'
+      page.should have_content("deploying a new instance of begriffs/lucre")
+    end
   end
 
-  it "queues a new app for deployment" do
-    visit "/deploy/begriffs/lucre"
-    click_on 'OK! Go!'
-    page.should have_content("deploying a new instance of begriffs/lucre")
+  context "deployment already queued" do
+    let(:app) { create :app }
+
+    before do
+      App.any_instance.should_receive(:deploy_async)
+      HerokuPlatform.any_instance.should_receive(:account).and_return({'email'=> app.user_email, 'id'=>'12312'})
+    end
+
+    it "redirects to an existing app" do
+      visit "/deploy/begriffs/lucre"
+      page.should have_content("you already have queued a deployment of that repo")
+    end
   end
 
 end

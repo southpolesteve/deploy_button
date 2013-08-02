@@ -7,7 +7,7 @@ class DeployController < ApplicationController
         if current_user
           @app = current_user.apps.where(owner: params[:owner], name: params[:name], transfered_at: nil).first
           if @app
-            flash[:notice] = "Looks like you already have queed a deployment of that repo. Please be patient."
+            flash[:notice] = "Looks like you already have queued a deployment of that repo. Please be patient."
             redirect_to @app
           end
         end
