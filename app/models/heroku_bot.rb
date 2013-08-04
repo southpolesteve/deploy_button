@@ -5,31 +5,41 @@ class HerokuBot
   class << self
 
     def account
-      get "/account" 
+      response = get "/account" 
+      handle_response(response)
+      response
     end
 
     def transfer(app)
-      post "/account/app-transfers", 
+      response = post "/account/app-transfers", 
         :body => { 
           :app => { 
             :name => app.heroku_name }, 
           :recipient => { 
             :email => app.user_email 
           }
-        }.to_json
+        }
+      handle_response(response)
+      response
     end
 
     def add_user_as_collaborator(app)
-      post "/apps/#{app.heroku_name}/collaborators", 
-        body: { collaborator: { email: app.user.email } }
+      response = post "/apps/#{app.heroku_name}/collaborators", 
+        body: { user: { email: app.user.email } }
+      handle_response(response)
+      response
     end
 
     def remove_bot(app)
-      delete "/apps/#{app.heroku_name}/collaborators/#{ENV['HEROKU_BOT_EMAIL']}"
+      response = delete "/apps/#{app.heroku_name}/collaborators/#{CGI.escape(ENV['HEROKU_BOT_EMAIL'])}"
+      handle_response(response)
+      response
     end
 
     def create
-      post "/apps"
+      response = post "/apps"
+      handle_response(response)
+      response
     end
 
     private
@@ -48,6 +58,12 @@ class HerokuBot
 
     def email
       ENV['HEROKU_BOT_EMAIL']
+    end
+
+    def handle_response(response)
+      unless response.success?
+        raise response.body
+      end
     end
 
   end

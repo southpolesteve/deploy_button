@@ -2,12 +2,16 @@
   .col-12
     %h1 Your deploy has been queued!
 
-    %p We're deploying a new instance of #{@deploy.owner}/#{@deploy.name} to Heroku. You will receive an email from heroku inviting you as a collaborator when it is ready. This process can take quite some time depending on the size of the repo and how many deploys are in front of you.
+    %p 
+    We're deploying a new instance of 
+    %code #{@deploy.owner}/#{@deploy.name} 
+    to Heroku. You will receive a collaborator invitation email from Heroku when it is ready. This process can take quite a while depending on the size of the repo and how many deploys are in front of you. Please refer to the README in your app's github repo for any additonal info about configuring Heroku for your app.
 
-    Feeling Impatient?
+    %h3 Feeling impatient?
 
-    Move to the priority queue by paying $5
+    %p 
+      Move ahead of everyone else and into the priority queue by paying $5
 
-    = form_tag charge_deploy_path(@deploy) do
-      %script.stripe-button{"data-amount" => "500", "data-description" => "Priority Deployment ($5.00)", "data-key" => "pk_Ym63xcw0xbka2A6rlnSRIwedm4eht", "data-name" => "Deploy to Heroku Button", :src => "https://checkout.stripe.com/v2/checkout.js"}
+      = form_tag charge_deploy_path(@deploy) do
+        %script.stripe-button{"data-amount" => "500", "data-description" => "Priority Deployment ($5.00)", "data-key" => "pk_Ym63xcw0xbka2A6rlnSRIwedm4eht", "data-name" => "Deploy to Heroku Button", :src => "https://checkout.stripe.com/v2/checkout.js"}
 

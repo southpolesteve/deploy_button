@@ -1,3 +1,5 @@
-%p This will deploy a new instance of #{params[:owner]}/#{params[:name]} to Heroku
+%h1 We're about to #{params[:owner]}/#{params[:name]} to Heroku
 
-= link_to "OK! Go!", deploys_path(deploy: {owner: params[:owner], name: params[:name] }), class: 'btn btn-primary', method: 'post'
+%p This process involves several steps can take 30 minutes or more depending on the size of the repo and how many people are waiting for other apps to deploy. Once completed, you can clone your repo directly from heroku and make changes. Please refer to the README in your app's github repo for any additonal info about configuring Heroku for your app.
+
+= link_to "OK! Deploy it!", deploys_path(deploy: {owner: params[:owner], name: params[:name] }), class: 'btn btn-primary', method: 'post'

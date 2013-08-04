@@ -16,4 +16,8 @@ class User < ActiveRecord::Base
     user
   end
 
+  def heroku
+    @heroku_client ||= HerokuPlatform.new(token)
+  end
+
 end

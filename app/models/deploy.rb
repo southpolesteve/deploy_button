@@ -40,10 +40,14 @@ class Deploy < ActiveRecord::Base
   end
 
   def transfer_to_user
-    HerokuBot.add_user_as_collaborator(self)
-    HerokuBot.transfer(self)
-    HerokuBot.remove_bot(self)
-    touch(:transfered_at)
+    unless transfered_at
+      HerokuBot.add_user_as_collaborator(self)
+      transfer_response = HerokuBot.transfer(self)
+      self.update_attributes(transfer_id: transfer_response['id'] )
+      user.heroku.accept_transfer(self)
+      HerokuBot.remove_bot(self)
+      touch(:transfered_at)
+    end
   end
 
   def clone_to_local
