@@ -4,7 +4,7 @@ describe 'Home page' do
 
   it "exists" do
     visit "/"
-    page.should have_content("Deploy to Heroku Button")
+    page.should have_content("Deploy any Github Repo to Heroku")
   end
 
 end
