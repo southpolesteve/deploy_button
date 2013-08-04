@@ -16,11 +16,11 @@ describe 'User requests a deploy' do
   end
 
   context "deployment already queued" do
-    let(:app) { create :app }
+    let(:deploy) { create :deploy }
 
     before do
       DeployWorker.should_receive(:perform_async).never
-      HerokuPlatform.any_instance.should_receive(:account).and_return({'email'=> app.user_email, 'id'=>'12312'})
+      HerokuPlatform.any_instance.should_receive(:account).and_return({'email'=> deploy.user_email, 'id'=>'12312'})
     end
 
     it "redirects to an existing app" do

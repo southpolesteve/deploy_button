@@ -1,8 +1,8 @@
-class App < ActiveRecord::Base
+class Deploy < ActiveRecord::Base
   belongs_to :user
   delegate :email, to: :user, prefix: true
 
-  def deploy
+  def to_heroku
     unless deploy_started_at
       touch(:deploy_started_at)
       create_on_heroku
@@ -64,7 +64,6 @@ class App < ActiveRecord::Base
 
   def clone_to_local
     cleanup_local_repo
-    binding.pry
     `git clone #{github_url} #{repo_loc}`
     touch(:cloned_at)
   end

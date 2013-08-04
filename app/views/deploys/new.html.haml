@@ -1,0 +1,3 @@
+%p This will deploy a new instance of #{params[:owner]}/#{params[:name]} to Heroku
+
+= link_to "OK! Go!", deploys_path(deploy: {owner: params[:owner], name: params[:name] }), class: 'btn btn-primary', method: 'post'

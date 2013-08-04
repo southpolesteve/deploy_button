@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130802035948) do
+ActiveRecord::Schema.define(version: 20130802044739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
-  create_table "apps", force: true do |t|
+  create_table "deploys", force: true do |t|
     t.integer  "user_id"
     t.hstore   "create_response"
     t.datetime "created_at"
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20130802035948) do
     t.datetime "deploy_started_at"
   end
 
-  add_index "apps", ["user_id"], name: "index_apps_on_user_id", using: :btree
+  add_index "deploys", ["user_id"], name: "index_deploys_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name"

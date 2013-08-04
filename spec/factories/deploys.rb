@@ -1,12 +1,12 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :app do
+  factory :deploy do
     owner 'begriffs'
     name 'lucre'
     user
 
-    factory :app_created_on_heroku do
+    factory :deploy_created_on_heroku do
       deploy_started_at { Time.now - 5.minutes }
       created_on_heroku_at { Time.now - 3.minutes }
       create_response { {"id"=>"7cbc4420-1d23-4919-ab78-66d286b919a6",

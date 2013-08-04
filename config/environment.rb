@@ -2,4 +2,4 @@
 require File.expand_path('../application', __FILE__)
 
 # Initialize the Rails application.
-Deploy::Application.initialize!
+DeployButton::Application.initialize!

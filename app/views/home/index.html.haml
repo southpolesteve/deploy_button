@@ -10,7 +10,7 @@
             %span.input-group-addon /
             %input#name.form-control{type: "text", placeholder: "Name"}
         %p
-          = link_to deploy_path(owner: "southpoleteve", name: "lucre") do
+          = link_to new_deploy_path(owner: "southpoleteve", name: "lucre") do
             = image_tag "deploy.png"
     .row
       .col-12

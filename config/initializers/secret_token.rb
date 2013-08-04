@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Deploy::Application.config.secret_key_base = 'cdcc453dc97164c62cac3af733773b9e160893e9e815eb3dd8faa46ce862aa9c237f5ab81d59c277dbcb757649bfb1e84447916b81c20f2e0c61ec39b9fe2391'
+DeployButton::Application.config.secret_key_base = ENV['RAILS_SECRET']

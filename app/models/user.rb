@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
 
-  has_many :apps
+  has_many :deploys
+
+  validates_uniqueness_of :email
   
   def self.find_or_create_with_omniauth(auth)
     token = auth['credentials']['token']

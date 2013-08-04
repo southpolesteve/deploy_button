@@ -1,8 +1,6 @@
-class AppsController < ApplicationController
+class DeploysController < ApplicationController
 
-  def index
-    @apps = current_user.apps
-  end
+  before_filter :authenticate_user!
 
   def create
     @app = current_user.apps.create!(person_params)

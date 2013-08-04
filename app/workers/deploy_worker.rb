@@ -1,8 +1,8 @@
 class DeployWorker
   include Sidekiq::Worker
 
-  def perform(app_id)
-    app = App.find(app_id)
-    app.deploy
+  def perform(id)
+    deploy = Deploy.find(id)
+    deploy.to_heroku
   end
 end

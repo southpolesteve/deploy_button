@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Deploy::Application.load_tasks
+DeployButton::Application.load_tasks
