@@ -4,12 +4,10 @@ class DeploysController < ApplicationController
   def new
     respond_to do |format|
       format.html do
-        if current_user
-          @deploy = current_user.deploys.where(owner: params[:owner], name: params[:name], transfered_at: nil).first
-          if @deploy
-            flash[:notice] = "Looks like you already have queued a deployment of that repo. Please be patient."
-            redirect_to @deploy
-          end
+        @deploy = current_user.deploys.where(owner: params[:owner], name: params[:name], transfered_at: nil).first
+        if @deploy
+          flash[:notice] = "It looks like you already have queued a deployment of that repo. Please be patient :)"
+          redirect_to @deploy
         end
       end
       format.png { send_file Rails.root.join("public", "deploy_button.png"), type: "image/png", disposition: "inline" }

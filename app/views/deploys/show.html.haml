@@ -1,32 +1,13 @@
-%p We're deploying a new instance of #{@deploy.owner}/#{@deploy.name} for you. You will get an email from heroku inviting you as a collaborator when it is ready. This process can take quite some time depending on the size of the repo and how many deploys are in front of you. If you want to see things move faster, send money to southpolesteve@gmail.com so I can increase server capacity
+.row
+  .col-12
+    %h1 Your deploy has been queued!
 
-Feeling Impatient?
+    %p We're deploying a new instance of #{@deploy.owner}/#{@deploy.name} to Heroku. You will receive an email from heroku inviting you as a collaborator when it is ready. This process can take quite some time depending on the size of the repo and how many deploys are in front of you.
 
-Move to the priority queue by paying $5
+    Feeling Impatient?
 
-= form_tag charge_deploy_path(@deploy) do
-  %script.stripe-button{"data-amount" => "500", "data-description" => "Priority Deployment ($5.00)", "data-key" => "pk_Ym63xcw0xbka2A6rlnSRIwedm4eht", "data-name" => "Deploy to Heroku Button", :src => "https://checkout.stripe.com/v2/checkout.js"}
+    Move to the priority queue by paying $5
 
-.panel{ class: @deploy.created_on_heroku_at ? "panel-success" : "panel-warning" }
-  .panel-heading
-    %h3.panel-title Create Heroku App
-  - if @deploy.created_on_heroku_at
-    Created app named "#{@deploy.heroku_name}" at #{@deploy.created_on_heroku_at.to_s(:short)}
+    = form_tag charge_deploy_path(@deploy) do
+      %script.stripe-button{"data-amount" => "500", "data-description" => "Priority Deployment ($5.00)", "data-key" => "pk_Ym63xcw0xbka2A6rlnSRIwedm4eht", "data-name" => "Deploy to Heroku Button", :src => "https://checkout.stripe.com/v2/checkout.js"}
 
-.panel{ class: @deploy.cloned_at ? "panel-success" : "panel-warning" }
-  .panel-heading
-    %h3.panel-title Clone Git Repository
-  - if @deploy.cloned_at
-    Cloned #{@deploy.github_url} at #{@deploy.cloned_at.to_s(:short)}
-
-.panel{ class: @deploy.pushed_to_heroku_at ? "panel-success" : "panel-warning" }
-  .panel-heading
-    %h3.panel-title Push to Heroku
-  - if @deploy.pushed_to_heroku_at
-    Pushed to #{@deploy.heroku_name} at #{@deploy.pushed_to_heroku_at.to_s(:short)}
-
-.panel{ class: @deploy.transfered_at ? "panel-success" : "panel-warning" }
-  .panel-heading
-    %h3.panel-title Transfer Ownership
-  - if @deploy.transfered_at
-    Transfered ownership of #{@deploy.heroku_name} to #{@deploy.user_email} at #{@deploy.pushed_to_heroku_at.to_s(:short)}

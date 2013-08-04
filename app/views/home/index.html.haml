@@ -1,6 +1,6 @@
 .row
   .col-lg-6.col-12.text-center
-    %h1 Deploy to Heroku Button
+    %h3 Deploy any Github Repo to Heroku
     .row
       .col-lg-8.col-push-2
         %p
@@ -10,7 +10,7 @@
             %span.input-group-addon /
             %input#name.form-control{type: "text", placeholder: "Name"}
         %p
-          = link_to new_deploy_path(owner: "southpoleteve", name: "lucre") do
+          = link_to new_deploy_path(owner: "southpoleteve", name: "lucre"), id: 'button' do
             = image_tag "deploy.png"
     .row
       .col-12
@@ -80,10 +80,3 @@
         #collapse6.accordion-body.collapse
           .accordion-inner
             It sure can! The deploy button is a self replicating app.
-
-.row
-  .col-12
-    %hr
-    %p 
-      Currently in the queue: #{Sidekiq::Stats.new.enqueued}
-    %p Built by Steve Faulkner - @southpolesteve - southpolesteve@gmail.com

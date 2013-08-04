@@ -12,6 +12,16 @@ class Deploy < ActiveRecord::Base
     end
   end
 
+  def heroku_name
+    create_response['name'] if create_response
+  end
+
+  def github_url
+    "https://github.com/#{owner}/#{name}.git"
+  end
+
+  private
+
   def create_on_heroku
     unless create_response.present?
       update_attributes create_response: HerokuBot.create.to_hash
@@ -36,15 +46,11 @@ class Deploy < ActiveRecord::Base
     touch(:transfered_at)
   end
 
-  def heroku_name
-    create_response['name'] if create_response
+  def clone_to_local
+    cleanup_local_repo
+    `git clone #{github_url} #{repo_loc}`
+    touch(:cloned_at)
   end
-
-  def github_url
-    "https://github.com/#{owner}/#{name}.git"
-  end
-
-  private
 
   def repo_loc
     "/tmp/#{owner}-#{name}"
@@ -60,12 +66,6 @@ class Deploy < ActiveRecord::Base
 
   def cleanup_local_repo
     `rm -rf #{repo_loc}`
-  end
-
-  def clone_to_local
-    cleanup_local_repo
-    `git clone #{github_url} #{repo_loc}`
-    touch(:cloned_at)
   end
 
 end

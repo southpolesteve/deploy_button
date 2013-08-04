@@ -10,8 +10,20 @@
         = yield(:head)
   %body{:class => "#{controller_name} #{action_name}"}
   .container
-    = render 'layouts/messages'
+    .row
+      .col-12
+        = render 'layouts/messages'
     = yield
+    .row
+      .col-12
+        %hr
+        %p 
+          Currently in the queue: #{Sidekiq::Stats.new.enqueued}
+        %p 
+          Built by Steve Faulkner - 
+          = link_to "@southpolesteve", "https://twitter.com/southpolesteve"
+          \- 
+          = mail_to "southpolesteve@gmail.com"
 
   - if Rails.env.production?
     :javascript

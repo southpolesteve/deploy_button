@@ -8,8 +8,10 @@ $ ->
     owner = $('input#owner').val()
     name = $('input#name').val()
 
+    link = "https://deploy-button.herokuapp.com/deploy/#{owner}/#{name}"
     markdown = "[![Deploy to Heroku](https://deploy-button.herokuapp.com/deploy.png)](https://deploy-button.herokuapp.com/deploy/#{owner}/#{name})"
     html = "<a href='https://deploy-button.herokuapp.com/deploy/#{owner}/#{name}'><img alt='Deploy to Heroku' src='https://deploy-button.herokuapp.com/deploy.png'></a>"
 
     $('#markdown pre').text(markdown)
     $('#html pre').text(html)
+    $('#button').attr('href', link)
