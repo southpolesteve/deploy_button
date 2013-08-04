@@ -4,3 +4,4 @@
 [![Coverage Status](https://coveralls.io/repos/southpolesteve/deploy_button/badge.png?branch=master)](https://coveralls.io/r/southpolesteve/deploy_button?branch=master)
 [![Code Climate](https://codeclimate.com/github/southpolesteve/deploy_button.png)](https://codeclimate.com/github/southpolesteve/deploy_button)
 
+This is an app for deploying other open source apps to Heroku. See more at: https://deploy-button.herokuapp.com/
