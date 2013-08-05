@@ -236,6 +236,7 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
+    state_machine (1.2.0)
     stripe (1.8.3)
       multi_json (>= 1.0.4, < 2)
       rest-client (~> 1.4)
@@ -303,6 +304,7 @@ DEPENDENCIES
   sidekiq
   sinatra
   slim
+  state_machine
   stripe
   thin
   turbolinks

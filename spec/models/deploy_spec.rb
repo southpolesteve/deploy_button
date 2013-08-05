@@ -3,14 +3,16 @@ require 'spec_helper'
 describe Deploy do
   let(:deploy) { create(:deploy) }
 
-  describe ".deploy" do
+  describe ".proceed" do
     it "should call the proper methods in the correct order" do
       deploy.should_receive(:create_on_heroku).ordered
-      deploy.should_receive(:clone_to_local).ordered
-      deploy.should_receive(:push_to_heroku).ordered
-      deploy.should_receive(:transfer_to_user).ordered
-      deploy.to_heroku
-      deploy.deploy_started_at.should_not be_nil
+      deploy.should_receive(:clone).ordered
+      deploy.should_receive(:push).ordered
+      deploy.should_receive(:add_user).ordered
+      deploy.should_receive(:request_transfer).ordered
+      deploy.should_receive(:accept_transfer).ordered
+      deploy.should_receive(:remove_bot).ordered
+      deploy.proceed
     end
   end
 

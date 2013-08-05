@@ -23,6 +23,7 @@ gem 'slim'
 gem 'sinatra'
 gem 'sentry-raven'
 gem 'stripe'
+gem 'state_machine'
 
 group :production do
   gem "rails_12factor"

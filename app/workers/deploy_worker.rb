@@ -3,6 +3,6 @@ class DeployWorker
 
   def perform(id)
     deploy = Deploy.find(id)
-    deploy.to_heroku
+    deploy.proceed
   end
 end

@@ -2,14 +2,30 @@ class Deploy < ActiveRecord::Base
   belongs_to :user
   delegate :email, to: :user, prefix: true
 
-  def to_heroku
-    unless deploy_started_at
-      touch(:deploy_started_at)
-      create_on_heroku
-      clone_to_local
-      push_to_heroku
-      transfer_to_user
-    end
+
+  state_machine :state, :initial => :queued do
+
+      before_transition :queued => :created_on_heroku, :do => :create_on_heroku
+      before_transition :created_on_heroku => :cloned, :do => :clone
+      before_transition :cloned => :pushed, :do => :push
+      before_transition :pushed => :user_added, :do => :add_user
+      before_transition :user_added => :transfer_requested, :do => :request_transfer
+      before_transition :transfer_accepted => :bot_removed, :do => :accept_transfer
+      before_transition :bot_removed => :completed, :do => :remove_bot
+
+      after_transition any => any - :completed, :do => :proceed
+
+      event :proceed do
+        transition :queued => :created_on_heroku
+        transition :created_on_heroku => :cloned
+        transition :cloned => :pushed
+        transition :pushed => :user_added
+        transition :user_added => :transfer_requested
+        transition :transfer_requested => :transfer_accepted
+        transition :transfer_accepted => :bot_removed
+        transition :bot_removed => :completed
+      end
+
   end
 
   def heroku_name
@@ -23,13 +39,12 @@ class Deploy < ActiveRecord::Base
   private
 
   def create_on_heroku
-    unless create_response.present?
-      update_attributes create_response: HerokuBot.create.to_hash
-      touch(:created_on_heroku_at)
-    end
+    touch(:deploy_started_at)
+    update_attributes create_response: HerokuBot.create.to_hash
+    touch(:created_on_heroku_at)
   end
 
-  def push_to_heroku
+  def push
     GitSSHWrapper.with_wrapper(private_key: ENV['HEROKU_BOT_SSH_KEY']) do |wrapper|
       wrapper.set_env
       `git --git-dir #{repo_git_dir_loc} remote add heroku #{heroku_url}`
@@ -39,18 +54,25 @@ class Deploy < ActiveRecord::Base
     touch(:pushed_to_heroku_at)
   end
 
-  def transfer_to_user
-    unless transfered_at
-      HerokuBot.add_user_as_collaborator(self)
-      transfer_response = HerokuBot.transfer(self)
-      self.update_attributes(transfer_id: transfer_response['id'] )
-      user.heroku.accept_transfer(self)
-      HerokuBot.remove_bot(self)
-      touch(:transfered_at)
-    end
+  def add_user
+    HerokuBot.add_user_as_collaborator(self)
   end
 
-  def clone_to_local
+  def request_transfer
+    transfer_response = HerokuBot.transfer(self)
+    self.update_attributes(transfer_id: transfer_response['id'] )
+  end
+
+  def accept_transfer
+    user.heroku.accept_transfer(self)
+    touch(:transfered_at)
+  end
+
+  def remove_bot
+    HerokuBot.remove_bot(self)
+  end
+
+  def clone
     cleanup_local_repo
     `git clone #{github_url} #{repo_loc}`
     touch(:cloned_at)
