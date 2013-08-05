@@ -2,7 +2,7 @@
   .col-lg-6.col-12.text-center
     %h1 Deploy any Github Repo to Heroku
     .row
-      .col-lg-8.col-push-2
+      .col-12
         %p
           .input-group
             %span.input-group-addon http://github.com/
@@ -43,28 +43,7 @@
             Will this set config variables and provision addons?
         #collapse1.accordion-body.collapse
           .accordion-inner
-            Not yet. The deploy to Heroku button is does not currently support either of these, but we will in the near future. If you would like to help, file a pull request or an issue on our github repo.
-      .accordion-group
-        .accordion-heading
-          %a.accordion-toggle{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse2"}
-            How does this work?
-        #collapse2.accordion-body.collapse
-          .accordion-inner
-            \...
-      .accordion-group
-        .accordion-heading
-          %a.accordion-toggle{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse3"}
-            Is there an API? Can I deploy an app with a single API call?
-        #collapse3.accordion-body.collapse
-          .accordion-inner
-            Not yet! But we plan to add one very soon.
-      .accordion-group
-        .accordion-heading
-          %a.accordion-toggle{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse4"}
-            How does this work?
-        #collapse4.accordion-body.collapse
-          .accordion-inner
-            \...
+            Not yet. The deploy button does not currently support either of these, but we will in the near future. If you would like to help, file a pull request or an issue on our github repo.
       .accordion-group
         .accordion-heading
           %a.accordion-toggle{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse5"}
@@ -72,7 +51,6 @@
         #collapse5.accordion-body.collapse
           .accordion-inner
             We have to pay someone to walk all the way from the Github office to the Heroku office with a thumb drive. The walk is roughly 20 minutes
-
       .accordion-group
         .accordion-heading
           %a.accordion-toggle{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse6"}
