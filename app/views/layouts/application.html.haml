@@ -20,10 +20,12 @@
         %p 
           Currently in the queue: #{Sidekiq::Stats.new.enqueued}
         %p 
-          Built by Steve Faulkner - 
+          Built by 
           = link_to "@southpolesteve", "https://twitter.com/southpolesteve"
           \- 
           = mail_to "southpolesteve@gmail.com"
+          \-
+          = link_to "Home/FAQ", root_path
 
   - if Rails.env.production?
     :javascript
