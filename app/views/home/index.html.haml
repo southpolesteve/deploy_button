@@ -32,9 +32,6 @@
                 = '<a href="/deploy/southpoleteve/lucre"><img alt="Deploy" src="/assets/deploy.png"></a>'
 
   .col-lg-6.col-12
-    .alert.alert-success
-      Providing this service is ending up costing quite a bit of money! I'm currently looking for sponsors for this page. You may also send donations to 
-      %a{ href: "mailto:youremailaddress"} southpolesteve@gmail.com
     %h3 FAQ
     #accordion.accordion
       .accordion-group
@@ -58,3 +55,6 @@
         #collapse6.accordion-body.collapse
           .accordion-inner
             It sure can! The deploy button is a self replicating app.
+    .alert.alert-success
+      Providing this service is ending up costing quite a bit of money! I'm currently looking for sponsors for this page. Contact me at 
+      = mail_to "southpolesteve@gmail.com"
