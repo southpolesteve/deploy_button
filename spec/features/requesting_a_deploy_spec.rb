@@ -10,7 +10,7 @@ describe 'User requests a deploy' do
 
     it "queues a new app for deployment" do
       visit "/deploy/begriffs/lucre"
-      click_on 'OK! Deploy it!'
+      click_on 'Deploy it!'
       page.should have_content("deploying a new instance of begriffs/lucre")
     end
   end
