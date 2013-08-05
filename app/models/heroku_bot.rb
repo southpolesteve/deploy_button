@@ -42,6 +42,12 @@ class HerokuBot
       response
     end
 
+    def run_process(app, process)
+      response = post "/apps/{app.heroku_name}/dynos", body: { command: process, attach: false }
+      handle_response(response)
+      response
+    end
+
     private
 
     def auth_headers
@@ -65,7 +71,6 @@ class HerokuBot
         raise response.body
       end
     end
-
   end
 
   headers auth_headers
