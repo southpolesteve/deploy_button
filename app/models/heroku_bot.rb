@@ -37,7 +37,7 @@ class HerokuBot
     end
 
     def ssh_key
-      ENV['HEROKU_BOT_SSH_KEY'] || "Some other bullshit"
+      Rails.env.test? ? "kn123n123k12nk31k23nk12" : ENV['HEROKU_BOT_SSH_KEY']
     end
 
     private

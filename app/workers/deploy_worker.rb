@@ -4,6 +4,6 @@ class DeployWorker
 
   def perform(id)
     deploy = Deploy.find(id)
-    deploy.proceed
+    deploy.begin_deploy
   end
 end
