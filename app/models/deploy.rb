@@ -54,13 +54,13 @@ class Deploy < ActiveRecord::Base
   end
 
   def push
-    GitSSHWrapper.with_wrapper(private_key: ENV['HEROKU_BOT_SSH_KEY']) do |wrapper|
+    GitSSHWrapper.with_wrapper(private_key: HerokuBot.ssh_key) do |wrapper|
       wrapper.set_env
       `git --git-dir #{repo_git_dir_loc} remote add heroku #{heroku_url}`
       `git --git-dir #{repo_git_dir_loc} push heroku master`
-      cleanup_local_repo
     end
     touch(:pushed_to_heroku_at)
+    cleanup_local_repo
     success
     add_user unless @halt_deployment
   end

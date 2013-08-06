@@ -36,6 +36,10 @@ class HerokuBot
       post "/apps/{app.heroku_name}/dynos", body: { command: process, attach: false }
     end
 
+    def ssh_key
+      ENV['HEROKU_BOT_SSH_KEY'] || "Some other bullshit"
+    end
+
     private
 
     def auth_headers
@@ -52,12 +56,6 @@ class HerokuBot
 
     def email
       ENV['HEROKU_BOT_EMAIL']
-    end
-
-    def handle_response(response)
-      unless response.success?
-        raise response.body
-      end
     end
   end
 
