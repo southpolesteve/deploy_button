@@ -5,13 +5,11 @@ class HerokuBot
   class << self
 
     def account
-      response = get "/account" 
-      handle_response(response)
-      response
+      get "/account" 
     end
 
     def transfer(app)
-      response = post "/account/app-transfers", 
+      post "/account/app-transfers", 
         :body => { 
           :app => { 
             :name => app.heroku_name }, 
@@ -19,33 +17,23 @@ class HerokuBot
             :email => app.user_email 
           }
         }
-      handle_response(response)
-      response
     end
 
     def add_user_as_collaborator(app)
-      response = post "/apps/#{app.heroku_name}/collaborators", 
+      post "/apps/#{app.heroku_name}/collaborators", 
         body: { user: { email: app.user.email } }
-      handle_response(response)
-      response
     end
 
     def remove_bot(app)
-      response = delete "/apps/#{app.heroku_name}/collaborators/#{CGI.escape(ENV['HEROKU_BOT_EMAIL'])}"
-      handle_response(response)
-      response
+      delete "/apps/#{app.heroku_name}/collaborators/#{CGI.escape(ENV['HEROKU_BOT_EMAIL'])}"
     end
 
     def create
-      response = post "/apps"
-      handle_response(response)
-      response
+      post "/apps"
     end
 
     def run_process(app, process)
-      response = post "/apps/{app.heroku_name}/dynos", body: { command: process, attach: false }
-      handle_response(response)
-      response
+      post "/apps/{app.heroku_name}/dynos", body: { command: process, attach: false }
     end
 
     private

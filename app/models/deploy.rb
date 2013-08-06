@@ -2,46 +2,55 @@ class Deploy < ActiveRecord::Base
   belongs_to :user
   delegate :email, to: :user, prefix: true
 
+  attr_accessor :halt_deployment
 
   state_machine :state, :initial => :queued do
 
-      before_transition :queued => :created_on_heroku, :do => :create_on_heroku
-      before_transition :created_on_heroku => :cloned, :do => :clone
-      before_transition :cloned => :pushed, :do => :push
-      before_transition :pushed => :user_added, :do => :add_user
-      before_transition :user_added => :transfer_requested, :do => :request_transfer
-      before_transition :transfer_accepted => :bot_removed, :do => :accept_transfer
-      before_transition :bot_removed => :completed, :do => :remove_bot
-
-      after_transition any => any - :completed, :do => :proceed
-
-      event :proceed do
+      event :success do
         transition :queued => :created_on_heroku
         transition :created_on_heroku => :cloned
         transition :cloned => :pushed
         transition :pushed => :user_added
         transition :user_added => :transfer_requested
         transition :transfer_requested => :transfer_accepted
-        transition :transfer_accepted => :bot_removed
-        transition :bot_removed => :completed
+        transition :transfer_accepted => :completed
+      end
+
+      event :failure do
+        transition :queued => :creation_on_heroku_failed
+        transition :created_on_heroku => :clone_failed
+        transition :cloned => :push_failed
+        transition :pushed => :user_add_failed
+        transition :user_added => :transfer_request_failed
+        transition :transfer_requested => :transfer_accept_failed
+        transition :transfer_accepted => :not_completed
       end
 
   end
 
-  def heroku_name
-    create_response['name'] if create_response
+  def begin_deploy
+    touch(:deploy_started_at)
+    create_on_heroku
   end
-
-  def github_url
-    "https://github.com/#{owner}/#{name}.git"
-  end
-
-  private
 
   def create_on_heroku
-    touch(:deploy_started_at)
-    update_attributes create_response: HerokuBot.create.to_hash
-    touch(:created_on_heroku_at)
+    response = HerokuBot.create
+    if response.success?
+      update_attributes create_response: response.to_hash
+      touch(:created_on_heroku_at)
+      success
+      clone unless @halt_deployment
+    else
+      failure
+    end
+  end
+
+  def clone
+    cleanup_local_repo
+    `git clone #{github_url} #{repo_loc}`
+    touch(:cloned_at)
+    success
+    push unless @halt_deployment
   end
 
   def push
@@ -52,30 +61,45 @@ class Deploy < ActiveRecord::Base
       cleanup_local_repo
     end
     touch(:pushed_to_heroku_at)
+    success
+    add_user unless @halt_deployment
   end
 
   def add_user
-    HerokuBot.add_user_as_collaborator(self)
+    response = HerokuBot.add_user_as_collaborator(self)
+    if response.success? 
+      success
+      request_transfer unless @halt_deployment
+    else
+      failure
+    end
   end
 
   def request_transfer
-    transfer_response = HerokuBot.transfer(self)
-    self.update_attributes(transfer_id: transfer_response['id'] )
+    response = HerokuBot.transfer(self)
+    if response.success?
+      self.transfer_id = response['id']
+      success
+      accept_transfer unless @halt_deployment
+    else
+      failure
+    end
   end
 
   def accept_transfer
-    user.heroku.accept_transfer(self)
-    touch(:transfered_at)
+    response = user.heroku.accept_transfer(self)
+    if response.success?
+      touch(:transfered_at)
+      success
+      remove_bot unless @halt_deployment
+    else
+      failure
+    end
   end
 
   def remove_bot
-    HerokuBot.remove_bot(self)
-  end
-
-  def clone
-    cleanup_local_repo
-    `git clone #{github_url} #{repo_loc}`
-    touch(:cloned_at)
+    response = HerokuBot.remove_bot(self)
+    response.success? ? success : failure
   end
 
   def repo_loc
@@ -88,6 +112,14 @@ class Deploy < ActiveRecord::Base
 
   def heroku_url
     create_response['git_url']
+  end
+
+  def heroku_name
+    create_response['name'] if create_response
+  end
+
+  def github_url
+    "https://github.com/#{owner}/#{name}.git"
   end
 
   def cleanup_local_repo
