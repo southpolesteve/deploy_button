@@ -90,7 +90,7 @@ OmniAuth.config.mock_auth[:heroku] = OmniAuth::AuthHash.new({
   "credentials" =>
   {"token" => "jnkl123jnk123jnk123kjn12",
    "refresh_token" => "k1231k23k123k12kwm1k2e1m2",
-   "expires_at" => 1375439943,
+   "expires_at" => (Time.now+8.hours).to_i,
    "expires" => true},
   "extra" => {}
   })

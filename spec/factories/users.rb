@@ -6,5 +6,7 @@ FactoryGirl.define do
     provider "heroku" 
     token "j123k1231kn2312jkn32kj3"
     heroku_id "asdasdad@users.heroku.com"
+    token_expires_at { Time.now + 2.days }
+    refresh_token "qweqwe23123n12j3n12"
   end
 end
