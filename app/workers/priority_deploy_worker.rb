@@ -4,6 +4,6 @@ class PriorityDeployWorker
 
   def perform(id)
     deploy = Deploy.find(id)
-    deploy.begin_deploy
+    deploy.start_or_continue_deploy
   end
 end

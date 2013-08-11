@@ -28,12 +28,29 @@ class Deploy < ActiveRecord::Base
 
   end
 
-  def begin_deploy
-    touch(:deploy_started_at)
-    create_on_heroku
+  def start_or_continue_deploy
+    case state
+    when "queued"
+      create_on_heroku
+    when "created_on_heroku"
+      clone
+    when "cloned"
+      clone
+    when "pushed"
+      add_user
+    when "user_added"
+      request_transfer
+    when "transfer_requested"
+      accept_transfer
+    when "transfer_accepted"
+      remove_bot
+    when "completed"
+    else
+    end
   end
 
   def create_on_heroku
+    touch(:deploy_started_at)
     response = HerokuBot.create
     if response.success?
       update_attributes create_response: response.to_hash

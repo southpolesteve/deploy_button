@@ -3,16 +3,19 @@ require 'spec_helper'
 describe Deploy do
   let(:deploy) { create(:deploy) }
 
-  describe ".begin_deploy" do
-    before do
-      deploy.should_receive :create_on_heroku
-      deploy.begin_deploy
-    end
+  # describe ".start_or_continue_deploy" do
+  #   let(:deploy) { create(:deploy , state: state) }
 
-    it "should record the start" do
-      deploy.deploy_started_at.should_not be_nil
-    end
-  end
+  #   before do
+  #     deploy.should_receive step
+  #     deploy.start_or_continue_deploy
+  #   end
+
+  #   { :queued => :create_on_heroku }
+
+  #   context "queued" do
+  #   end
+  # end
 
   describe ".create_on_heroku" do
     let(:create_response) { {test: "test"} }
@@ -21,6 +24,10 @@ describe Deploy do
       deploy.should_receive :clone
       HerokuBot.should_receive(:create).and_return(double(success?: true, to_hash: create_response ))
       deploy.create_on_heroku
+    end
+
+    it "should record the start" do
+      deploy.deploy_started_at.should_not be_nil
     end
 
     it "should record the create" do
