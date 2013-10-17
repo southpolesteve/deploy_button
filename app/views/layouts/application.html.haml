@@ -11,14 +11,12 @@
   %body{:class => "#{controller_name} #{action_name}"}
   .container
     .row
-      .col-12
+      .col-md-8.col-md-offset-2
         = render 'layouts/messages'
-    = yield
-    .row
-      .col-12
+        = yield
         %hr
         %p 
-          Currently in the queue: #{Sidekiq::Stats.new.enqueued}
+          Deploys in the queue: #{Sidekiq::Stats.new.enqueued}
         %p 
           Built by 
           = link_to "@southpolesteve", "https://twitter.com/southpolesteve"

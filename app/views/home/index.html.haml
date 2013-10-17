@@ -1,60 +1,59 @@
-.row
-  .col-lg-6.col-12.text-center
-    %h1 Deploy any Github Repo to Heroku
-    .row
-      .col-12
-        %p
-          .input-group
-            %span.input-group-addon http://github.com/
-            %input#owner.form-control{type: "text", placeholder: "Owner"}
-            %span.input-group-addon /
-            %input#name.form-control{type: "text", placeholder: "Name"}
-        %p
-          = link_to new_deploy_path(owner: "southpoleteve", name: "lucre"), id: 'button' do
-            = image_tag "deploy.png"
-    .row
-      .col-12
-        %p
-          Put this button in the README of your git repo!
-        %ul.nav.nav-tabs
-          %li.active
-            %a{href: "#markdown", data: { toggle: "tab"}} Markdown
-          %li
-            %a{href: "#html", data: {toggle: "tab" }} HTML
-        #tabContent.tab-content
-          #markdown.tab-pane.active
-            %p
-              %pre
-                [![Deploy to heroku](https://deploy-button.herokuapp.com/deploy.png)](https://deploy-button.herokuapp.com/deploy/{repo_owner}/{repo_name})
-          #html.tab-pane
-            %p
-              %pre
-                = '<a href="/deploy/southpoleteve/lucre"><img alt="Deploy" src="/assets/deploy.png"></a>'
+%h1.page-header.text-center Deploy any Github Repo to Heroku
+%p
+  .row
+    .col-sm-6.col-sm-offset-3
+      .input-group
+        %span.input-group-addon http://github.com/
+        %input#owner.form-control{type: "text", placeholder: "Owner"}
+        %span.input-group-addon /
+        %input#name.form-control{type: "text", placeholder: "Name"}
+%p.text-center
+  = link_to new_deploy_path(owner: "southpoleteve", name: "lucre"), id: 'button' do
+    = image_tag "deploy.png"
+%p You can deploy any github repo directly to heroku right now. Fill in the info above and click the "Deploy to Heroku" button. Follow the instructions on the next screen and wait for an email from heroku saying the app has been transfered to your account.
 
-  .col-lg-6.col-12
-    %h3 FAQ
-    #accordion.accordion
-      .accordion-group
-        .accordion-heading
-          %a.accordion-toggle{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse1"}
-            Will this set config variables and provision addons?
-        #collapse1.accordion-body.collapse
-          .accordion-inner
-            Not yet. The deploy button does not currently support either of these, but we will in the near future. If you would like to help, file a pull request or an issue on our github repo.
-      .accordion-group
-        .accordion-heading
-          %a.accordion-toggle{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse5"}
-            Why does this take so long?
-        #collapse5.accordion-body.collapse
-          .accordion-inner
-            We have to pay someone to walk all the way from the Github office to the Heroku office with a thumb drive. The walk is roughly 20 minutes
-      .accordion-group
-        .accordion-heading
-          %a.accordion-toggle{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse6"}
-            Can the app deploy itself?
-        #collapse6.accordion-body.collapse
-          .accordion-inner
-            It sure can! The deploy button is a self replicating app.
-    .alert.alert-success
-      Providing this service is ending up costing quite a bit of money! I'm currently looking for sponsors for this page. Contact me at 
-      = mail_to "southpolesteve@gmail.com"
+%h3.page-header Get Your Own Button
+%p
+  Fill out the above form and copy either the HTML or Markdown text below to get a Deploy to Heroku button for your readme or website.
+%ul.nav.nav-tabs
+  %li.active
+    %a{href: "#markdown", data: { toggle: "tab"}} Markdown
+  %li
+    %a{href: "#html", data: {toggle: "tab" }} HTML
+#tabContent.tab-content
+  #markdown.tab-pane.active
+    %p
+      %pre
+        [![Deploy to heroku](https://deploy-button.herokuapp.com/deploy.png)](https://deploy-button.herokuapp.com/deploy/{repo_owner}/{repo_name})
+  #html.tab-pane
+    %p
+      %pre
+        = '<a href="/deploy/{repo_name}/{repo_owner}"><img alt="Deploy" src="/assets/deploy.png"></a>'
+%h3.page-header Repo Owners
+%h3.page-header FAQ
+#accordion.accordion
+  .accordion-group
+    .accordion-heading
+      %a.accordion-toggle{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse1"}
+        Will this set config variables and provision addons?
+    #collapse1.accordion-body.collapse
+      .accordion-inner
+        Not yet. The deploy button does not currently support either of these, but we will in the near future. If you would like to help, file a pull request or an issue on our github repo.
+  .accordion-group
+    .accordion-heading
+      %a.accordion-toggle{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse5"}
+        Why does this take so long?
+    #collapse5.accordion-body.collapse
+      .accordion-inner
+        We have to pay someone to walk all the way from the Github office to the Heroku office with a thumb drive. The walk is roughly 20 minutes
+  .accordion-group
+    .accordion-heading
+      %a.accordion-toggle{"data-parent" => "#accordion", "data-toggle" => "collapse", :href => "#collapse6"}
+        Can the app deploy itself?
+    #collapse6.accordion-body.collapse
+      .accordion-inner
+        It sure can! The deploy button is a self replicating app.
+%p Question not answered here? Create an issue on the #{link_to 'Github', 'https://github.com/southpolesteve/deploy_button/issues'} 
+.alert.alert-success
+  Providing this service is ending up costing quite a bit of money! I'm currently looking for sponsors for this page. Contact me at 
+  = mail_to "southpolesteve@gmail.com"

@@ -10,7 +10,8 @@ class Deploy < ActiveRecord::Base
         transition :queued => :created_on_heroku
         transition :created_on_heroku => :cloned
         transition :cloned => :pushed
-        transition :pushed => :user_added
+        transition :pushed => :after_deploy_complete
+        transition :after_deploy_complete => :user_added
         transition :user_added => :transfer_requested
         transition :transfer_requested => :transfer_accepted
         transition :transfer_accepted => :completed
@@ -20,7 +21,8 @@ class Deploy < ActiveRecord::Base
         transition :queued => :creation_on_heroku_failed
         transition :created_on_heroku => :clone_failed
         transition :cloned => :push_failed
-        transition :pushed => :user_add_failed
+        transition :pushed => :after_deploy_failed
+        transition :after_deploy_complete => :user_add_failed
         transition :user_added => :transfer_request_failed
         transition :transfer_requested => :transfer_accept_failed
         transition :transfer_accepted => :not_completed
@@ -37,6 +39,8 @@ class Deploy < ActiveRecord::Base
     when "cloned"
       clone
     when "pushed"
+      run_after_deploy
+    when "after_deploy_complete"
       add_user
     when "user_added"
       request_transfer
@@ -49,14 +53,18 @@ class Deploy < ActiveRecord::Base
     end
   end
 
+  def next_action
+    success
+    start_or_continue_deploy
+  end
+
   def create_on_heroku
     touch(:deploy_started_at)
     response = HerokuBot.create
     if response.success?
       update_attributes create_response: response.to_hash
       touch(:created_on_heroku_at)
-      success
-      clone unless @halt_deployment
+      next_action
     else
       failure
     end
@@ -67,7 +75,7 @@ class Deploy < ActiveRecord::Base
     `git clone #{github_url} #{repo_loc}`
     touch(:cloned_at)
     success
-    push unless @halt_deployment
+    start_or_continue_deploy
   end
 
   def push
@@ -78,15 +86,17 @@ class Deploy < ActiveRecord::Base
     end
     touch(:pushed_to_heroku_at)
     cleanup_local_repo
-    success
-    add_user unless @halt_deployment
+    next_action
+  end
+
+  def run_after_deploy
+    next_action
   end
 
   def add_user
     response = HerokuBot.add_user_as_collaborator(self)
     if response.success? 
-      success
-      request_transfer unless @halt_deployment
+      next_action
     else
       failure
     end
@@ -96,8 +106,7 @@ class Deploy < ActiveRecord::Base
     response = HerokuBot.transfer(self)
     if response.success?
       self.transfer_id = response['id']
-      success
-      accept_transfer unless @halt_deployment
+      next_action
     else
       failure
     end
@@ -107,8 +116,7 @@ class Deploy < ActiveRecord::Base
     response = user.heroku.accept_transfer(self)
     if response.success?
       touch(:transfered_at)
-      success
-      remove_bot unless @halt_deployment
+      next_action
     else
       failure
     end
@@ -117,6 +125,7 @@ class Deploy < ActiveRecord::Base
   def remove_bot
     response = HerokuBot.remove_bot(self)
     response.success? ? success : failure
+    start_or_continue_deploy
   end
 
   def repo_loc
@@ -141,6 +150,9 @@ class Deploy < ActiveRecord::Base
 
   def cleanup_local_repo
     `rm -rf #{repo_loc}`
+  end
+
+  def deploy_button_config
   end
 
 end
