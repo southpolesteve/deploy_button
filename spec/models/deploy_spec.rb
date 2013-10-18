@@ -74,17 +74,27 @@ describe Deploy do
 
     describe ".run_after_deploy" do
       let(:deploy) { create(:deploy_created_on_heroku, state: 'pushed') }
+      let(:github_response) { "" }
 
       before do
-        deploy.should_receive(:config).and_return(DeployConfig.new(""))
-        deploy.run_after_deploy
+        deploy.should_receive(:config).and_return(DeployConfig.new(github_response))
       end
 
       it "should transition states" do
+        deploy.run_after_deploy
         deploy.state.should eq("after_deploy_complete")
       end
 
-      # TODO handle case when deploy config exists
+      context "config contains after_deploy commands" do
+        let(:github_response) { "after_deploy:\n- rake db:migrate\n- a test command\n" }
+
+        it "should run the commands on heroku" do
+          HerokuBot.should_receive(:run).with(deploy, "rake db:migrate").and_return(double(success?: true))
+          HerokuBot.should_receive(:run).with(deploy, "a test command").and_return(double(success?: true))
+          deploy.run_after_deploy
+        end
+
+      end
     end
 
     describe ".add_user" do

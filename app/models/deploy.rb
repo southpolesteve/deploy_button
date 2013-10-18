@@ -72,8 +72,7 @@ class Deploy < ActiveRecord::Base
     cleanup_local_repo
     `git clone #{github_url} #{repo_loc}`
     touch(:cloned_at)
-    success
-    start_or_continue_deploy
+    next_action
   end
 
   def push
@@ -89,7 +88,7 @@ class Deploy < ActiveRecord::Base
 
   def run_after_deploy
     responses = config.after_deploy.map { |command| HerokuBot.run(self, command) }
-    if responses.map(&:success?).all?
+    if responses.all?(&:success?)
       next_action
     else
       failure
