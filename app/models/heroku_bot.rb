@@ -8,6 +8,13 @@ class HerokuBot
       get "/account" 
     end
 
+    def run(app, command)
+      post "/apps/#{app.heroku_name}/dynos",
+        :body => {
+          :command => command
+        }
+    end
+
     def transfer(app)
       post "/account/app-transfers", 
         :body => { 

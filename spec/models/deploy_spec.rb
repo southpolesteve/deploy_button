@@ -72,10 +72,11 @@ describe Deploy do
       end
     end
 
-    describe ".add_user" do
+    describe ".run_after_deploy" do
       let(:deploy) { create(:deploy_created_on_heroku, state: 'pushed') }
 
       before do
+        deploy.should_receive(:config).and_return(DeployConfig.new(""))
         deploy.run_after_deploy
       end
 
@@ -144,8 +145,18 @@ describe Deploy do
   describe ".heroku_name" do
     let(:deploy) { create(:deploy_created_on_heroku) }
 
-    it "is correct" do
-      deploy.heroku_name.should eq("afternoon-brook-7719")
+    subject { deploy.heroku_name }
+
+    it { should eq("afternoon-brook-7719") }
+  end
+
+  describe ".config" do
+    let(:deploy) { create(:deploy) }
+
+    it do
+      HTTParty.should_receive(:get).with(deploy.config_url)
+      DeployConfig.should_receive(:new)
+      deploy.config
     end
   end
 

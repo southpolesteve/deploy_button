@@ -2,8 +2,6 @@ class Deploy < ActiveRecord::Base
   belongs_to :user
   delegate :email, to: :user, prefix: true
 
-  attr_accessor :halt_deployment
-
   state_machine :state, :initial => :queued do
 
       event :success do
@@ -90,7 +88,11 @@ class Deploy < ActiveRecord::Base
   end
 
   def run_after_deploy
-    next_action
+    if config.run_after_deploy
+      next_action
+    else
+      failure
+    end
   end
 
   def add_user
@@ -146,6 +148,15 @@ class Deploy < ActiveRecord::Base
 
   def github_url
     "https://github.com/#{owner}/#{name}.git"
+  end
+
+  def config_url
+    "https://raw.github.com/#{owner}/#{name}/master/.deploy_button.yml"
+  end
+
+  def config
+    @config_response ||= HTTParty.get(config_url)
+    @config ||= DeployConfig.new(@config_response)
   end
 
   def cleanup_local_repo

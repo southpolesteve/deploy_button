@@ -10,6 +10,13 @@ describe HerokuBot do
     end
   end
 
+  describe 'run' do
+    it 'calls the correct HTTParty method' do
+      HerokuBot.should_receive(:post).with('/apps/afternoon-brook-7719/dynos', an_instance_of(Hash)).and_return(double(success?: true))
+      HerokuBot.run(deploy, "rake db:migrate")
+    end
+  end
+
   describe 'transfer' do
     it 'calls the correct HTTParty method' do
       HerokuBot.should_receive(:post).with('/account/app-transfers', an_instance_of(Hash)).and_return(double(success?: true))
