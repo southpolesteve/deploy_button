@@ -83,6 +83,8 @@ describe Deploy do
       it "should transition states" do
         deploy.state.should eq("after_deploy_complete")
       end
+
+      # TODO handle case when deploy config exists
     end
 
     describe ".add_user" do

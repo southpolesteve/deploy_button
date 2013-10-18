@@ -88,7 +88,8 @@ class Deploy < ActiveRecord::Base
   end
 
   def run_after_deploy
-    if config.run_after_deploy
+    responses = config.after_deploy.map { |command| HerokuBot.run(self, command) }
+    if responses.map(&:success?).all?
       next_action
     else
       failure
@@ -156,14 +157,11 @@ class Deploy < ActiveRecord::Base
 
   def config
     @config_response ||= HTTParty.get(config_url)
-    @config ||= DeployConfig.new(@config_response)
+    @config ||= DeployConfig.new(@config_response, heroku_name)
   end
 
   def cleanup_local_repo
     `rm -rf #{repo_loc}`
-  end
-
-  def deploy_button_config
   end
 
 end
