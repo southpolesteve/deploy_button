@@ -156,7 +156,7 @@ class Deploy < ActiveRecord::Base
 
   def config
     @config_response ||= HTTParty.get(config_url)
-    @config ||= DeployConfig.new(@config_response, heroku_name)
+    @config ||= DeployConfig.new(@config_response)
   end
 
   def cleanup_local_repo
