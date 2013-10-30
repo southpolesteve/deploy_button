@@ -1,22 +1,3 @@
-if Rails.env.production? 
-
-  require 'autoscaler/sidekiq'
-  require 'autoscaler/heroku_scaler'
-
-    Sidekiq.configure_server do |config| 
-      config.server_middleware do |chain|
-        chain.add(Autoscaler::Sidekiq::Server, Autoscaler::HerokuScaler.new('sidekiq'), 60)
-      end
-    end
-
-    Sidekiq.configure_client do |config| 
-      config.client_middleware do |chain|
-        chain.add Autoscaler::Sidekiq::Client, 'default' => Autoscaler::HerokuScaler.new('sidekiq')
-      end
-    end
-
-end
-
 require 'sidekiq/web'
 
 Sidekiq::Web.use(Rack::Auth::Basic) do |user, password|

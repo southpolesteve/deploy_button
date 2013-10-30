@@ -28,7 +28,6 @@ gem 'state_machine'
 group :production do
   gem "rails_12factor"
   gem 'unicorn'
-  gem 'autoscaler', require: false
 end
 
 group :development do

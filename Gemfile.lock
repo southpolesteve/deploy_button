@@ -28,9 +28,6 @@ GEM
     addressable (2.3.5)
     arel (4.0.0)
     atomic (1.1.14)
-    autoscaler (0.6.0)
-      heroku-api
-      sidekiq (~> 2.7)
     better_errors (1.0.1)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -70,7 +67,6 @@ GEM
     diff-lcs (1.2.4)
     erubis (2.7.0)
     eventmachine (1.0.3)
-    excon (0.25.3)
     execjs (2.0.2)
     factory_girl (4.2.0)
       activesupport (>= 3.0.0)
@@ -92,8 +88,6 @@ GEM
       haml (>= 3.1, < 4.1)
       railties (>= 3.1, < 4.1)
     hashie (2.0.5)
-    heroku-api (0.3.15)
-      excon (~> 0.25.1)
     hike (1.2.3)
     hpricot (0.8.6)
     html2haml (1.0.1)
@@ -284,7 +278,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  autoscaler
   better_errors
   binding_of_caller
   capybara
