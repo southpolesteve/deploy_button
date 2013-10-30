@@ -74,10 +74,10 @@ describe Deploy do
 
     describe ".run_after_deploy" do
       let(:deploy) { create(:deploy_created_on_heroku, state: 'pushed') }
-      let(:github_response) { "" }
+      let(:config) { {} }
 
       before do
-        deploy.should_receive(:config).and_return(DeployConfig.new(github_response))
+        deploy.should_receive(:config).at_least(1).and_return(config)
       end
 
       it "should transition states" do
@@ -86,7 +86,7 @@ describe Deploy do
       end
 
       context "config contains after_deploy commands" do
-        let(:github_response) { "after_deploy:\n- rake db:migrate\n- a test command\n" }
+        let(:config) { { 'after_deploy' => ['rake db:migrate','a test command'] } }
 
         it "should run the commands on heroku" do
           HerokuBot.should_receive(:run).with(deploy, "rake db:migrate").and_return(double(success?: true))
@@ -166,8 +166,7 @@ describe Deploy do
     let(:deploy) { create(:deploy) }
 
     it do
-      HTTParty.should_receive(:get).with(deploy.config_url)
-      DeployConfig.should_receive(:new)
+      HTTParty.should_receive(:get).with(deploy.config_url).and_return(double(success?: true))
       deploy.config
     end
   end

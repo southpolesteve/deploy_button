@@ -87,11 +87,15 @@ class Deploy < ActiveRecord::Base
   end
 
   def run_after_deploy
-    responses = config.after_deploy.map { |command| HerokuBot.run(self, command) }
-    if responses.all?(&:success?)
-      next_action
+    if config['after_deploy'] && config['after_deploy'].is_a?(Array)
+      responses = config['after_deploy'].map { |command| HerokuBot.run(self, command) }
+      if responses.all?(&:success?)
+        next_action
+      else
+        failure
+      end
     else
-      failure
+      next_action
     end
   end
 
@@ -155,8 +159,11 @@ class Deploy < ActiveRecord::Base
   end
 
   def config
+    @config ||= config_response.success? ? YAML.load(config_response) : {}
+  end
+
+  def config_response
     @config_response ||= HTTParty.get(config_url)
-    @config ||= DeployConfig.new(@config_response)
   end
 
   def cleanup_local_repo
